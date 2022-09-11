@@ -1,5 +1,7 @@
 // user.js 划分是跟后端接口文档
 import request from '@/utils/request'
+// 引入store
+// import store from '@/store'
 
 /**
  * 登录
@@ -26,5 +28,18 @@ export const login = (mobile, code) => {
 export const sendCodeAPI = (mobile) => {
   return request({
     url: `/v1_0/sms/codes/${mobile}`
+  })
+}
+
+/**
+ * 获取用户自己的信息
+ * @returns Promise
+ */
+export const getUserInfoAPI = () => {
+  return request({
+    url: '/v1_0/user'
+    // headers: {
+    //   Authorization: `Bearer ${store.state.tokenObj.token}`
+    // }
   })
 }
