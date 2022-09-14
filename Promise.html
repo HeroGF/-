@@ -10,6 +10,7 @@
 
 <body>
     <script>
+        // # region
         // polyfill: 垫片
 
         // 1. executor 执行器函数
@@ -62,28 +63,60 @@
             }
 
             then(onFulfilled, onRejected) {
-                if (this.status === FULFILLED) {
-                    onFulfilled(this.value)
-                }
 
-                if (this.status === REJECTED) {
-                    onRejected(this.reason)
-                }
+                const p2 = new Promise((resolve, reject) => {
+                    if (this.status === FULFILLED) {
+                        queueMicrotask(() => {
+                            try {
+                                let x = onFulfilled(this.value)
+                                resolve(x)
+                            } catch (error) {
+                                reject(error)
+                            }
+                        })
+                    }
 
-                if (this.status === PENDING) {
-                    // 异步
-                    // 订阅
-                    // this.onFulfilled = onFulfilled
-                    // this.onRejected = onRejected
-                    this.onFulfilledCallBacks.push(() => {
-                        // 多写逻辑
-                        onFulfilled(this.value)
-                    })
+                    if (this.status === REJECTED) {
+                        queueMicrotask(() => {
+                            try {
+                                let x = onRejected(this.reason)
+                                resolve(x)
+                            } catch (error) {
+                                reject(error)
+                            }
+                        })
+                    }
 
-                    this.onRejectedCallBacks.push(() => {
-                        onRejected(this.reason)
-                    })
-                }
+                    if (this.status === PENDING) {
+                        // 异步
+                        // 订阅
+                        // this.onFulfilled = onFulfilled
+                        // this.onRejected = onRejected
+                        this.onFulfilledCallBacks.push(() => {
+                            // 多写逻辑
+                            queueMicrotask(() => {
+                                try {
+                                    let x = onFulfilled(this.value)
+                                    resolve(x)
+                                } catch (error) {
+                                    reject(error)
+                                }
+                            })
+                        })
+
+                        this.onRejectedCallBacks.push(() => {
+                            queueMicrotask(() => {
+                                try {
+                                    let x = onRejected(this.reason)
+                                    resolve(x)
+                                } catch (error) {
+                                    reject(error)
+                                }
+                            })
+                        })
+                    }
+                })
+                return p2
             }
         }
 

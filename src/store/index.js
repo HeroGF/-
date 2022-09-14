@@ -7,12 +7,14 @@ Vue.use(Vuex)
 
 // vuex-persistedstate --> 持久化state
 
+// #region
 // 1.下载
 //  - yarn add vuex-persistedstate@3.2.1
 // 2.引入
 //  - import createPersistedState from 'vuex-persistedstate'
 // 3.调用
 //  - plugins: [createPersistedState()]
+// #endregion
 
 // 配置项
 // key:默认值是vuex
@@ -24,16 +26,15 @@ export default new Vuex.Store({
     createPersistedState({
       key: 'HEIMA_TOUTIAO',
       // storage: window.sessionStorage,
-      reducer({ tokenObj }) {
-        return {
-          tokenObj
-        }
+      reducer({ tokenObj, myChannels }) {
+        return { tokenObj, myChannels }
       }
     })
   ],
   state: {
-    tokenObj: {}
+    tokenObj: {},
     // JSON.parse(window.localStorage.getItem('HEIMATOUTIAO_TOKEN')) || {}
+    myChannels: []
   },
   getters: {
     isLogin(state) {
@@ -46,6 +47,14 @@ export default new Vuex.Store({
       state.tokenObj = token
       // token持久化本地存储
       // window.localStorage.setItem('HEIMATOUTIAO_TOKEN', JSON.stringify(token))
+    },
+
+    /**
+     *
+     * @param {Array} channels 删除或者添加后的最新的channels
+     */
+    SET_MY_CHANNELS(state, channels) {
+      state.myChannels = channels
     }
   },
   actions: {},
