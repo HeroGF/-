@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="$router.push(`/detail/${article.art_id}`)">
     <!-- 没有图片 -->
     <van-cell
       v-if="article.cover.type === 0"
@@ -33,6 +33,7 @@
 <script>
 import dayjs from '@/utils/dayjs'
 export default {
+  name: 'articleitem',
   props: {
     article: {
       type: Object,

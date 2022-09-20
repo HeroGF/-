@@ -35,7 +35,8 @@ export default new Vuex.Store({
     tokenObj: {},
     // JSON.parse(window.localStorage.getItem('HEIMATOUTIAO_TOKEN')) || {}
     myChannels: [],
-    histories: []
+    histories: [],
+    list: [] // 保存评论回复渲染的数据
   },
   getters: {
     isLogin(state) {
@@ -64,6 +65,12 @@ export default new Vuex.Store({
      */
     SET_HISTORIES(state, histories) {
       state.histories = histories
+    },
+    SET_LIST(state, list) {
+      state.list = list
+    },
+    ADD_LISTITEM(state, item) {
+      state.list.unshift(item)
     }
   },
   actions: {},

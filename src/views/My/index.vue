@@ -33,7 +33,11 @@
               align="center"
               style="height: 100%"
             >
-              <van-button class="edit-btn" size="mini" round
+              <van-button
+                class="edit-btn"
+                size="mini"
+                round
+                @click="$router.push('/user')"
                 >编辑按钮</van-button
               >
             </van-row>
